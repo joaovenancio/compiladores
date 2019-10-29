@@ -398,16 +398,18 @@ void classbody(RecoverySet g) throws ParseEOFException :
 {
 RecoverySet f2 = new RecoverySet(SEMICOLON).union(g).remove(IDENT),
             f3 = First.methoddecl.union(g).remove(IDENT),
-            f4 = First.constructdecl.union(f3).remove(IDENT),
-            f5 = First.vardecl.union(f4).remove(IDENT);
+            f4 = First.methoddecl.union(f3).remove(IDENT),
+            f5 = First.constructdecl.union(f4).remove(IDENT),
+            f6 = First.vardecl.union(f5).remove(IDENT);
 }
 {
 try {
    <LBRACE>
-      [classlist(f5)]
+      [classlist(f6)]
       (LOOKAHEAD(3) vardecl(f2) <SEMICOLON>)*
-      (constructdecl(f4))*
-      (methoddecl(f3))*
+      (LOOKAHEAD(4) atribstat(f3)  <SEMICOLON>)* //Aqui
+      (constructdecl(f5))*
+      (methoddecl(f4))*
    <RBRACE>
 }
 catch (ParseException e)
@@ -674,13 +676,12 @@ RecoverySet f1 = new RecoverySet(RPAREN).union(g),
           )
 }
 
-
 void expression(RecoverySet g) throws ParseEOFException :
 {
 }
 {
 try {
-    numexpr() [( <LT> | <GT> | <LE> | <GE> | <EQ> | <NEQ>) numexpr()]
+  (lognumexpr() | <NOT> <LPAREN> lognumexpr() <RPAREN>) [ ( ( <AND> | <OR> | <XOR> ) (lognumexpr() | <NOT> <LPAREN> lognumexpr() <RPAREN>) )+ ]	
 }
 catch (ParseException e)
 {
@@ -688,6 +689,12 @@ catch (ParseException e)
 }
 }
 
+void lognumexpr() throws ParseEOFException:
+{
+}
+{
+  numexpr() [( <LT> | <GT> | <LE> | <GE> | <EQ> | <NEQ>) numexpr()]
+}
 
 void numexpr() throws ParseEOFException :
 {
