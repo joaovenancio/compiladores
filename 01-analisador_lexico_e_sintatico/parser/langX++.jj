@@ -211,16 +211,20 @@ TOKEN :
 | < FOR: "for" >
 | < IF: "if" >
 | < INT: "int" >
+| < BYTE: "byte" > //Byte
+| < SHORT: "short" > //Short
+| < LONG: "long" > //Long
+| < FLOAT: "float" > //Float
 | < NEW: "new" >
 | < PRINT: "print" >
 | < READ: "read" >
 | < RETURN: "return" >
 | < STRING: "string" >
 | < SUPER: "super" >
-| < FINAL: "final">
-| < PUBLIC: "public">
-| < PRIVATE: "private">
-| < PROTECTED: "protected">
+| < FINAL: "final" >
+| < PUBLIC: "public" >
+| < PRIVATE: "private" >
+| < PROTECTED: "protected" >
 }
 
 /* constantes */
@@ -249,7 +253,7 @@ TOKEN :
   ) >
 |
 < float_constant:(// números do tipo float
-				 ( (["0"-"9"])* "." ["0"-"9"] (["0"-"9"])* "f" )				   
+				 ( ["0"-"9"] (["0"-"9"])* "." ["0"-"9"] (["0"-"9"])* ["f"] )				   
   ) >
 | 
   < string_constant:    // constante string como "abcd bcda"
@@ -386,7 +390,7 @@ void classdecl(RecoverySet g) throws ParseEOFException :
 }
 {
 try {
-   <CLASS>  <IDENT> [ <EXTENDS> <IDENT> ] classbody(g)
+   [ <PUBLIC> | <PRIVATE> | <PROTECTED> ] [ <FINAL> ] <CLASS>  <IDENT> [ <EXTENDS> <IDENT> ] classbody(g)
 }
 catch (ParseException e)
 {
@@ -424,7 +428,7 @@ void vardecl(RecoverySet g) throws ParseEOFException :
 }
 {
 try {
-   (<INT> |  <STRING> | <IDENT> )
+   [ <PUBLIC> | <PRIVATE> | <PROTECTED> ] [ <FINAL> ] ( <BYTE> | <SHORT> | <LONG> | <FLOAT> | <INT> |  <STRING> | <IDENT> )
    <IDENT> ( <LBRACKET> <RBRACKET>)*
   (<COMMA> <IDENT> ( <LBRACKET> <RBRACKET>)* )*
 }
@@ -453,7 +457,7 @@ void methoddecl(RecoverySet g) throws ParseEOFException :
 }
 {
 try {
-   (<INT> |  <STRING> | <IDENT> ) (<LBRACKET> <RBRACKET>)*
+   [ <PUBLIC> | <PRIVATE> | <PROTECTED> ] [ <FINAL> ] ( <BYTE> | <SHORT> | <LONG> | <FLOAT> | <INT> |  <STRING> | <IDENT> ) (<LBRACKET> <RBRACKET>)*
    <IDENT> methodbody(g)
 }
 catch (ParseException e)
@@ -482,8 +486,8 @@ void paramlist(RecoverySet g) throws ParseEOFException :
 {
 try {
    [
-    (<INT> |  <STRING> | <IDENT>) <IDENT> (<LBRACKET> <RBRACKET>)*
-    (<COMMA> (<INT> |  <STRING> | <IDENT>) <IDENT> (<LBRACKET> <RBRACKET>)* )*
+    [ <PUBLIC> | <PRIVATE> | <PROTECTED> ] [ <FINAL> ] ( <BYTE> | <SHORT> | <LONG> | <FLOAT> | <INT> |  <STRING> | <IDENT>) <IDENT> (<LBRACKET> <RBRACKET>)*
+    (<COMMA> (<BYTE> | <SHORT> | <LONG> | <FLOAT> | <INT> | <STRING> | <IDENT>) <IDENT> (<LBRACKET> <RBRACKET>)* )*
    ]
 }
 catch (ParseException e)
@@ -671,7 +675,7 @@ RecoverySet f1 = new RecoverySet(RPAREN).union(g),
 {
     <NEW> (
              LOOKAHEAD(2) <IDENT> <LPAREN> arglist(f1) <RPAREN> |
-             ( <INT> | <STRING> | <IDENT> )
+             ( <BYTE> | <SHORT> | <LONG> | <FLOAT> | <INT> | <STRING> | <IDENT> )
              (<LBRACKET> expression(f2) <RBRACKET>)+
           )
 }
