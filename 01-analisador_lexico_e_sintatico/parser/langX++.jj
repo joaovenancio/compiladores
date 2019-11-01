@@ -382,7 +382,7 @@ void classlist(RecoverySet g) throws ParseEOFException :
 RecoverySet f = First.classlist.union(g);
 }
 {
-   classdecl(f) [ classlist(g) ]
+   classdecl(f) [ LOOKAHEAD(2) classlist(g) ] //Colocado lookahead
 }
 
 void classdecl(RecoverySet g) throws ParseEOFException :
@@ -402,18 +402,19 @@ void classbody(RecoverySet g) throws ParseEOFException :
 {
 RecoverySet f2 = new RecoverySet(SEMICOLON).union(g).remove(IDENT),
             f3 = First.methoddecl.union(g).remove(IDENT),
-            f4 = First.methoddecl.union(f3).remove(IDENT),
-            f5 = First.constructdecl.union(f4).remove(IDENT),
-            f6 = First.vardecl.union(f5).remove(IDENT);
+            f4 = First.constructdecl.union(f3).remove(IDENT),
+            f5 = First.vardecl.union(f4).remove(IDENT);
 }
 {
 try {
    <LBRACE>
-      [classlist(f6)]
-      (LOOKAHEAD(3) vardecl(f2) <SEMICOLON>)*
-      (LOOKAHEAD(4) atribstat(f3)  <SEMICOLON>)* //Aqui
-      (constructdecl(f5))*
-      (methoddecl(f4))*
+      [LOOKAHEAD(3) classlist(f5)] //Colocado lookahead
+      (
+      LOOKAHEAD(4) vardecl(f2) <SEMICOLON> |
+      LOOKAHEAD(4) varattrib(f3)  <SEMICOLON> | //Aqui
+      constructdecl(f4) |
+      LOOKAHEAD(4) methoddecl(f3)
+  )*
    <RBRACE>
 }
 catch (ParseException e)
@@ -422,6 +423,20 @@ catch (ParseException e)
 }
 }
 
+void varattrib(RecoverySet g) throws ParseEOFException :
+{
+}
+{
+try {
+   [ <PUBLIC> | <PRIVATE> | <PROTECTED> ] [ <FINAL> ] ( <BYTE> | <SHORT> | <LONG> | <FLOAT> | <INT> |  <STRING> | <IDENT> )
+   <IDENT> ( <LBRACKET> <RBRACKET>)*
+  (<COMMA> <IDENT> ( <LBRACKET> <RBRACKET>)* )* <ASSIGN> ( alocexpression(g) | expression(g))
+}
+catch (ParseException e)
+{
+   consumeUntil(g, e, "vardecl");
+}
+}
 
 void vardecl(RecoverySet g) throws ParseEOFException :
 {
@@ -727,7 +742,8 @@ void factor() throws ParseEOFException :
 }
 {    
     ( 
-       <int_constant> | 
+       <int_constant> |
+       <float_constant > |
        <string_constant> | 
        <null_constant> |
        lvalue(null) |
