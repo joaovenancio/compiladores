@@ -410,10 +410,10 @@ try {
    <LBRACE>
       [LOOKAHEAD(3) classlist(f5)] //Colocado lookahead
       (
+      LOOKAHEAD(4) methoddecl(f3) |
       LOOKAHEAD(4) vardecl(f2) <SEMICOLON> |
       LOOKAHEAD(4) varattrib(f3)  <SEMICOLON> | //Aqui
-      constructdecl(f4) |
-      LOOKAHEAD(4) methoddecl(f3)
+      LOOKAHEAD(3) constructdecl(f4)
   )*
    <RBRACE>
 }
@@ -459,7 +459,7 @@ void constructdecl(RecoverySet g) throws ParseEOFException :
 }
 {
 try {
-    <CONSTRUCTOR> methodbody(g)
+    [ <PUBLIC> | <PRIVATE> | <PROTECTED> ] [ <FINAL> ] <CONSTRUCTOR> methodbody(g)
 }
 catch (ParseException e)
 {
@@ -472,7 +472,7 @@ void methoddecl(RecoverySet g) throws ParseEOFException :
 }
 {
 try {
-   [ <PUBLIC> | <PRIVATE> | <PROTECTED> ] [ <FINAL> ] ( <BYTE> | <SHORT> | <LONG> | <FLOAT> | <INT> |  <STRING> | <IDENT> ) (<LBRACKET> <RBRACKET>)*
+   [ <PUBLIC> | <PRIVATE> | <PROTECTED> ] [ <FINAL> ] ( <BYTE> | <SHORT> | <LONG> | <FLOAT> | <INT> | <STRING> | <IDENT> ) (<LBRACKET> <RBRACKET>)*
    <IDENT> methodbody(g)
 }
 catch (ParseException e)
