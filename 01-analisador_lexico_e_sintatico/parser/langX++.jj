@@ -685,7 +685,7 @@ void expression(RecoverySet g) throws ParseEOFException :
 }
 {
 try {
-  (lognumexpr() | <NOT> <LPAREN> lognumexpr() <RPAREN>) [ ( ( <AND> | <OR> | <XOR> ) (lognumexpr() | <NOT> <LPAREN> lognumexpr() <RPAREN>) )+ ]	
+  (<NOT> <LPAREN> lognumexpr() <RPAREN> | lognumexpr() ) [ ( ( <AND> | <OR> | <XOR> ) ( <NOT> <LPAREN> lognumexpr() <RPAREN> | lognumexpr()) )+ ]	
 }
 catch (ParseException e)
 {

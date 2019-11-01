@@ -1150,6 +1150,12 @@ RecoverySet f1 = new RecoverySet(RPAREN).union(g),
     try {
       try {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case NOT:
+          jj_consume_token(NOT);
+          jj_consume_token(LPAREN);
+          lognumexpr();
+          jj_consume_token(RPAREN);
+          break;
         case int_constant:
         case string_constant:
         case null_constant:
@@ -1158,12 +1164,6 @@ RecoverySet f1 = new RecoverySet(RPAREN).union(g),
         case PLUS:
         case MINUS:
           lognumexpr();
-          break;
-        case NOT:
-          jj_consume_token(NOT);
-          jj_consume_token(LPAREN);
-          lognumexpr();
-          jj_consume_token(RPAREN);
           break;
         default:
           jj_la1[45] = jj_gen;
@@ -1192,6 +1192,12 @@ RecoverySet f1 = new RecoverySet(RPAREN).union(g),
               throw new ParseException();
             }
             switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+            case NOT:
+              jj_consume_token(NOT);
+              jj_consume_token(LPAREN);
+              lognumexpr();
+              jj_consume_token(RPAREN);
+              break;
             case int_constant:
             case string_constant:
             case null_constant:
@@ -1200,12 +1206,6 @@ RecoverySet f1 = new RecoverySet(RPAREN).union(g),
             case PLUS:
             case MINUS:
               lognumexpr();
-              break;
-            case NOT:
-              jj_consume_token(NOT);
-              jj_consume_token(LPAREN);
-              lognumexpr();
-              jj_consume_token(RPAREN);
               break;
             default:
               jj_la1[47] = jj_gen;
@@ -1479,6 +1479,19 @@ RecoverySet f =  new RecoverySet(COMMA).union(g);
     finally { jj_save(3, xla); }
   }
 
+  private boolean jj_3R_37() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_scan_token(65)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(66)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(67)) return true;
+    }
+    }
+    return false;
+  }
+
   private boolean jj_3R_36() {
     if (!jj_rescan) trace_call("lognumexpr(LOOKING AHEAD...)");
     if (jj_3R_38()) { if (!jj_rescan) trace_return("lognumexpr(LOOKAHEAD FAILED)"); return true; }
@@ -1491,19 +1504,6 @@ RecoverySet f =  new RecoverySet(COMMA).union(g);
   private boolean jj_3_1() {
     if (jj_3R_18()) return true;
     if (jj_scan_token(SEMICOLON)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_37() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_scan_token(65)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(66)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(67)) return true;
-    }
-    }
     return false;
   }
 
@@ -1529,7 +1529,8 @@ RecoverySet f =  new RecoverySet(COMMA).union(g);
   }
 
   private boolean jj_3R_32() {
-    if (jj_3R_36()) return true;
+    if (jj_scan_token(NOT)) return true;
+    if (jj_scan_token(LPAREN)) return true;
     return false;
   }
 
@@ -1630,6 +1631,11 @@ RecoverySet f =  new RecoverySet(COMMA).union(g);
     if (jj_scan_token(64)) return true;
     }
     }
+    return false;
+  }
+
+  private boolean jj_3R_33() {
+    if (jj_3R_36()) return true;
     return false;
   }
 
@@ -1814,12 +1820,6 @@ RecoverySet f =  new RecoverySet(COMMA).union(g);
   private boolean jj_3_3() {
     if (jj_scan_token(IDENT)) return true;
     if (jj_scan_token(IDENT)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_33() {
-    if (jj_scan_token(NOT)) return true;
-    if (jj_scan_token(LPAREN)) return true;
     return false;
   }
 
