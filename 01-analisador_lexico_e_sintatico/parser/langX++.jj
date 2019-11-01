@@ -221,10 +221,10 @@ TOKEN :
 | < RETURN: "return" >
 | < STRING: "string" >
 | < SUPER: "super" >
-| < FINAL: "final" >
-| < PUBLIC: "public" >
-| < PRIVATE: "private" >
-| < PROTECTED: "protected" >
+| < FINAL: "final" > //Final
+| < PUBLIC: "public" > //Public
+| < PRIVATE: "private" > //Private
+| < PROTECTED: "protected" > //Protected
 }
 
 /* constantes */
@@ -486,7 +486,7 @@ void paramlist(RecoverySet g) throws ParseEOFException :
 {
 try {
    [
-    [ <PUBLIC> | <PRIVATE> | <PROTECTED> ] [ <FINAL> ] ( <BYTE> | <SHORT> | <LONG> | <FLOAT> | <INT> |  <STRING> | <IDENT>) <IDENT> (<LBRACKET> <RBRACKET>)*
+    ( <BYTE> | <SHORT> | <LONG> | <FLOAT> | <INT> |  <STRING> | <IDENT>) <IDENT> (<LBRACKET> <RBRACKET>)*
     (<COMMA> (<BYTE> | <SHORT> | <LONG> | <FLOAT> | <INT> | <STRING> | <IDENT>) <IDENT> (<LBRACKET> <RBRACKET>)* )*
    ]
 }
