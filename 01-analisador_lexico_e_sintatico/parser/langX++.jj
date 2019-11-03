@@ -410,9 +410,9 @@ try {
    <LBRACE>
       [LOOKAHEAD(3) classlist(f5)] //Colocado lookahead
       (
-      LOOKAHEAD(4) methoddecl(f3) |
+      LOOKAHEAD(6) methoddecl(f3) |
+      LOOKAHEAD(5) varattrib(f3)  <SEMICOLON> | //Aqui
       LOOKAHEAD(4) vardecl(f2) <SEMICOLON> |
-      LOOKAHEAD(4) varattrib(f3)  <SEMICOLON> | //Aqui
       LOOKAHEAD(3) constructdecl(f4)
   )*
    <RBRACE>

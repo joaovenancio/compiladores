@@ -3,8 +3,8 @@ private class Calculos {
 double Calculadora;  // variavel declarada fora de método
 
 private float Soma();
-private int name;
-private float teste = 3.14f;
+private final int name;
+private final float teste = 3.14f;
 
     private final float Soma(){ //private e float
       float a;
@@ -18,6 +18,10 @@ private float teste = 3.14f;
 }
 
 	public constructor() {
+		a = 32;
+	}
+
+	public final constructor() {
 		a = 32;
 	}
 
