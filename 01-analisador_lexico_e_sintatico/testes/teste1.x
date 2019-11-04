@@ -21,7 +21,12 @@ private class Teste1 {
 		return false;
 	}
 
-
+	public constructor() {
+		calc = 3;
+		jeans = 42;
+		bin = 2;
+		semestre = 2;
+	}
 
 	public void intalize() {
 		x = 64;
@@ -72,7 +77,9 @@ private class Teste1 {
 		}
 		if ((jv+lv > ls) && !(jv + 17)){
 			resposta ="slk";
-		}    	// funfou
+		}    	
+
+		return resposta; // funfou
     }
 
     private void temporaryValues(int z, int x, int w, int y){
@@ -82,6 +89,6 @@ private class Teste1 {
     	w=7;
     	y=1;
 
-    	return z+x+w+y; // aceitou retorno em void
+    	return z+x+w+y;
     }
 }
