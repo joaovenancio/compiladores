@@ -1,5 +1,5 @@
 X++ Compiler - Version 1.0 - 2004
-Reading from file parser/teste1erro.x . . .
+Reading from file testes/teste1erro.x . . .
 
 *** classbody ***
      Syncronizing Set: class 
