@@ -1,0 +1,4 @@
+X++ Compiler - Version 1.0 - 2004
+Reading from file testes/teste1.x . . .
+0 Lexical Errors found
+0 Syntactic Errors found
