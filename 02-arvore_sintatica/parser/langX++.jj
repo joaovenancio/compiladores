@@ -626,8 +626,6 @@ catch (ParseException e)
 }
 }
 
-
-
 StatementNode statement(RecoverySet g) throws ParseEOFException :
 {
 StatementNode s = null;
