@@ -839,11 +839,7 @@ Token t1 = null,
 ListNode l = null;
 }
 {
-try { //CUIDAR
-   <IDENT> (
-           <LBRACKET> expression(null) <RBRACKET> |
-           <DOT> <IDENT> [<LPAREN> arglist(null) <RPAREN>]
-         )*
+try {
    t1 = <IDENT> { e1 = new VarNode(t1); }
    (
        t1 = <LBRACKET> e2 = expression(null) <RBRACKET> 
@@ -877,18 +873,13 @@ Token t1, t2;
 RecoverySet f1 = new RecoverySet(RPAREN).union(g),
             f2 = new RecoverySet(RBRACKET).union(g);
 }
-{ //CUIDAR
-    <NEW> (
-             LOOKAHEAD(2) <IDENT> <LPAREN> arglist(f1) <RPAREN> |
-             ( <BYTE> | <SHORT> | <LONG> | <FLOAT> | <INT> | <STRING> | <IDENT> )
-             (<LBRACKET> expression(f2) <RBRACKET>)+
-          )
+{
     t1 = <NEW> 
     ( 
       LOOKAHEAD(2) t2 = <IDENT> <LPAREN> l = arglist(f1) <RPAREN>
          { e1 = new NewObjectNode(t1, t2, l); } 
 |
-      ( t2 = <INT> | t2 = <STRING> | t2 = <IDENT> )
+      ( t2 = <BYTE> | t2 = <SHORT> | t2 = <LONG> | t2 = <FLOAT> | t2 = <INT> | t2 = <STRING> | t2 = <IDENT> )
       (<LBRACKET> e2 = expression(f2) <RBRACKET>
               {
                 if ( l == null )
@@ -928,11 +919,27 @@ catch (ParseException e)
 }
 }
 
-void lognumexpr() throws ParseEOFException:
+ExpreNode lognumexpr(RecoverySet g) throws ParseEOFException :
 {
+ExpreNode e1 = null, e2 = null;
+Token t = null;
+
 }
 {
-  numexpr() [( <LT> | <GT> | <LE> | <GE> | <EQ> | <NEQ>) numexpr()]
+try {
+    e1 = numexpr() 
+    [
+      ( t = <LT> | t = <GT> | t = <LE> | t = <GE> | t = <EQ> | t = <NEQ>)
+      e2 = numexpr()
+        { e1 = new RelationalNode(t, e1, e2); }
+    ] 
+    { return e1; }
+} 
+catch (ParseException e)
+{
+   consumeUntil(g, e, "expression");
+   return new RelationalNode(t, e1, e2);
+}
 }
 
 ExpreNode numexpr() throws ParseEOFException :
@@ -982,15 +989,11 @@ ExpreNode e = null;
 Token t;
 }
 {    
-    ( //CUIDAR
-       <int_constant> |
-       <float_constant > |
-       <string_constant> | 
-       <null_constant> |
-       lvalue(null) |
-       <LPAREN> expression(null) <RPAREN>
+    (
        t = <int_constant> { e = new IntConstNode(t); }
-    | 
+    |
+       t = <float_constant > { e = new FloatConstNode(t); }
+    |
        t = <string_constant> { e = new StringConstNode(t); }
     | 
        t = <null_constant> { e = new NullConstNode(t); }
